@@ -1,0 +1,39 @@
+{
+  "name": "daniel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "nodemon --watch \"src/**/*.ts\" --ignore \"node_modules/**/*\" --exec ts-node src/index.ts",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/express": "^4.17.12",
+    "@types/express-session": "^1.17.3",
+    "@types/mysql": "^2.15.19",
+    "@types/sequelize": "^4.28.9",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "node-tesseract-ocr": "^2.2.1",
+    "nodemon": "^2.0.7",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.9.0",
+    "tedious": "^14.0.0",
+    "tesseract.js": "^2.1.1",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^15.9.0",
+    "sqlite3": "^5.0.2"
+  }
+}
