@@ -1,6 +1,4 @@
-import bcrypt from "bcryptjs";
 import { Answers } from "../modals/Answers";
-import { User } from "../modals/User";
 
 export class AnswersController {
 
@@ -53,69 +51,5 @@ export class AnswersController {
     res.json(answers);
   }
 
-
-
-  public static async updatePassword(req, res) {
-    const { currentPassword, newPassword } = req.body
-    const id = req.session.userId;
-
-    const user = await User.findByPk(id)
-
-    if (user) {
-      //@ts-ignore
-      const match = await bcrypt.compare(currentPassword, user.password)
-      if (match) {
-        const password = await bcrypt.hash(newPassword, 10)
-        //@ts-ignore
-        user.password = password.replace("$2a", "$2y")
-        await user.save({})
-        res.json({ message: "Password alterada com sucesso" });
-      } else {
-        res.json({ message: "Password actual não é válida!" });
-      }
-    } else {
-      res.sendStatus(404)
-    }
-  }
-
-
-
-
-
-  public static async authenticate(req, res) {
-    const { email, password } = req.body
-    const user = await User.findOne({ where: { email: email } });
-
-    if (user) {
-      const bd_password = user.get("password")
-      //@ts-ignore
-      //const match = await bcrypt.compare(password, hash);
-      //const match = await bcrypt.compare(password, hash);
-      if (password === bd_password) {
-        //req.session.loggedIn = true
-        //req.session.userId = user.get("id")
-        res.json({ message: "Dados corretos!" });
-      } else {
-        res.json({ message: "Password não é válida!" });
-      }
-    } else {
-      res.json({ message: "E-mail não registado!" });
-    }
-  }
-
-  public static async logout(req, res) {
-    if (req.session.loggedIn) {
-      req.session.loggedIn = false
-      req.session.destroy(err => {
-        if (err) {
-          res.status(400).send('Unable to log out')
-        } else {
-          res.send(false)
-        }
-      });
-    } else {
-      res.end()
-    }
-  }
 
 }

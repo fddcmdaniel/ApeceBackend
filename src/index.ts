@@ -4,21 +4,16 @@ import session from "express-session";
 import { Sequelize } from 'sequelize';
 import { AnswersController } from "./controllers/AnswersController";
 import { AppController } from "./controllers/AppController";
-import { EventController } from "./controllers/EventController";
 import { ModulesController } from "./controllers/ModulesController";
 import { QuestionsController } from "./controllers/QuestionsController";
 import { ResultController } from "./controllers/ResultController";
 import { UserController } from "./controllers/UserController";
 import { Answers } from "./modals/Answers";
-import { Candidates } from "./modals/Candidates";
-import { DocumentTypes } from "./modals/DocumentTypes";
-import { Event } from "./modals/Event";
 import { Modules } from "./modals/Modules";
 import { Questions } from "./modals/Questions";
 import { Result } from "./modals/Result";
 import { User } from "./modals/User";
 import { UsersModules } from "./modals/UsersModules";
-import { Votes } from "./modals/Votes";
 
 export const sequelize = new Sequelize("app_com_db", "sa", "Joao1234!", {
   dialect: "mssql",
@@ -44,30 +39,13 @@ const main = async () => {
   }
 
   // Sequelize Models e associações
-  const modals = [User, Modules, Questions, Answers, Result, UsersModules, Event, DocumentTypes, Candidates, Votes];
+  const modals = [User, Modules, Questions, Answers, Result, UsersModules];
   modals.forEach((modal) => modal.initialize(sequelize));
   Modules.hasMany(Questions, { foreignKey: "module_id" });
   Questions.hasMany(Answers, { foreignKey: "question_id" });
 
   User.belongsToMany(Modules, { through: 'users_modules', foreignKey: 'user_id', timestamps: false });
   Modules.belongsToMany(User, { through: 'users_modules', foreignKey: 'module_id', timestamps: false });
-
-
-  //Result.hasMany(UsersModules, { foreignKey: 'user_module_id' });
-  //Questions.belongsTo(Modules, { foreignKey: "module_id" });
-  //User.belongsToMany(Event, { through: 'users_events', foreignKey: 'id_user', timestamps: false })
-  //Event.belongsToMany(User, { through: 'users_events', foreignKey: 'id_event', timestamps: false })
-  //User.belongsTo(DocumentTypes, { as: 'DocType', foreignKey: 'id_doc' });
-  //Event.hasMany(Candidates, { as: 'CandidatesEvent', foreignKey: 'id_event' })
-  //Candidates.hasMany(Votes, { foreignKey: 'id_candidate' })
-
-  // get all users GET /users
-  // get user by GET /users/:id
-  // create user POST /users
-  // update
-  //   just specif fields PATCH /users/:id
-  //   entire object PUT /users/:id
-  // delete user DELETE /users
 
   //Middlewares de autenticação
   app.use((req: Request, res: Response, next: NextFunction) => {
@@ -113,16 +91,9 @@ const main = async () => {
   app.get('/users/search', UserController.search)
   app.put('/users/update', UserController.update);
   app.put('/users/updatepassword', UserController.updatePassword);
-  app.get('/users/doctypes', UserController.docTypes);
-
-  // Eventos
-  app.get('/users/events', EventController.usersEvents);
-  app.get('/event/listvotes/:id', EventController.votesEvent);
-  app.post('/event/vote', EventController.eventVote);
-  app.get('/event/:id/votecheck', EventController.voteCheck);
 
   // App
-  app.get('/convert', AppController.imageToText);
+  app.post('/convert', AppController.imageToText);
 
   app.listen(3001, function () {
     console.log("Server started on port 3001");

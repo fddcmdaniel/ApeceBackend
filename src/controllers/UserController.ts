@@ -5,10 +5,6 @@ import { Modules } from "../modals/Modules";
 import { User } from "../modals/User";
 export class UserController {
 
-  public static async docTypes(req, res) {
-    DocumentTypes.findAll().then((documents) => res.json(documents))
-  }
-
   public static async search(req, res) {
     const name = req.query.name;
     const findings = await User.findAll({
